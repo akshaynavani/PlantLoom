@@ -1,0 +1,69 @@
+spring:
+  application:
+    name: plantloom
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+    default-property-inclusion: non_null
+
+server:
+  port: ${PORT:8080}
+
+plantloom:
+  definitions-location: ${PLANTLOOM_DEFINITIONS:classpath:workflows/*.yml}
+  engine:
+    worker-threads: 8
+    max-concurrent-instances: 200
+    equipment-acquire-timeout-ms: 15000
+    default-stage-timeout-ms: 30000
+    default-await-timeout-ms: 60000
+    instance-deadline-ms: 600000
+    watchdog-interval-ms: 1000
+  equipment:
+    units:
+      MIXER: 2
+      OVEN: 2
+      FILLER: 1
+      CAPPER: 1
+      INSPECTOR: 1
+      ROBOT_ARM: 2
+      CNC: 3
+      PAINT_BOOTH: 1
+  simulation:
+    failure-rate: ${PLANTLOOM_FAILURE_RATE:0.05}
+    hang-rate: ${PLANTLOOM_HANG_RATE:0.01}
+    duration-jitter: 0.2
+    time-scale: ${PLANTLOOM_TIME_SCALE:1.0}
+    seed: 0
+    sensor-feed:
+      enabled: true
+      interval-ms: 500
+      channels:
+        "[tank.level]":
+          min: 0
+          max: 100
+          start: 40
+          step: 6
+        "[booth.humidity]":
+          min: 30
+          max: 80
+          start: 60
+          step: 3
+        "[line.pressure]":
+          min: 0.5
+          max: 2.5
+          start: 1.2
+          step: 0.15
+  diagnostics:
+    timeline-capacity: 200
+    recent-events-capacity: 500
+    recent-failures-capacity: 50
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: always
