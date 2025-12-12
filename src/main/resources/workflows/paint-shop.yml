@@ -1,0 +1,30 @@
+id: paint-shop
+name: Paint Shop
+description: >
+  Paints a body panel once booth humidity is in range, then cures it in an oven. Curing is
+  skipped for primer-only jobs.
+version: 1
+variables:
+  coat: topcoat
+stages:
+  - id: humidity-gate
+    name: Wait for booth humidity
+    await:
+      condition: "sensors['booth.humidity'] < 55"
+      timeoutMs: 45000
+
+  - id: paint
+    name: Spray coat
+    equipmentType: PAINT_BOOTH
+    durationMs: 2000
+    timeoutMs: 6000
+    retry: { maxAttempts: 2, backoffMs: 1000 }
+    set: { painted: true }
+
+  - id: cure
+    name: Oven cure
+    equipmentType: OVEN
+    durationMs: 3000
+    timeoutMs: 9000
+    when: "vars['coat'] != 'primer'"
+    retry: { maxAttempts: 2, backoffMs: 1000 }

@@ -1,0 +1,50 @@
+id: bottling-line
+name: Beverage Bottling Line
+description: >
+  Mixes a batch, pasteurises it, then fills, caps and inspects bottles. Filling waits until
+  the buffer tank has enough product, and inspection only runs when quality checks are enabled.
+version: 1
+variables:
+  batchSize: 500
+  qualityCheck: true
+stages:
+  - id: mix
+    name: Mix syrup and water
+    equipmentType: MIXER
+    durationMs: 1500
+    timeoutMs: 5000
+    retry: { maxAttempts: 3, backoffMs: 500, multiplier: 2.0 }
+    set: { mixed: true }
+
+  - id: pasteurise
+    name: Pasteurise batch
+    equipmentType: OVEN
+    durationMs: 2500
+    timeoutMs: 8000
+    retry: { maxAttempts: 2, backoffMs: 1000 }
+    set: { pasteurised: true }
+
+  - id: fill
+    name: Fill bottles
+    equipmentType: FILLER
+    durationMs: 1200
+    timeoutMs: 5000
+    await:
+      condition: "sensors['tank.level'] >= 30"
+      timeoutMs: 30000
+    retry: { maxAttempts: 3, backoffMs: 300, multiplier: 2.0 }
+
+  - id: cap
+    name: Cap bottles
+    equipmentType: CAPPER
+    durationMs: 600
+    timeoutMs: 3000
+    retry: { maxAttempts: 3, backoffMs: 200 }
+
+  - id: inspect
+    name: Vision inspection
+    equipmentType: INSPECTOR
+    durationMs: 800
+    timeoutMs: 4000
+    when: "vars['qualityCheck'] == true"
+    set: { inspected: true }

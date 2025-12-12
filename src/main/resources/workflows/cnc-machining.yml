@@ -1,0 +1,44 @@
+id: cnc-machining
+name: CNC Machining Cell
+description: >
+  A robot arm loads a blank, a CNC mill machines it, an optional deburr pass runs for fine
+  finishes, and the robot unloads the part. Machining is retried on spindle faults.
+version: 1
+variables:
+  finish: standard
+  partNumber: PL-1001
+stages:
+  - id: load
+    name: Load blank
+    equipmentType: ROBOT_ARM
+    durationMs: 700
+    timeoutMs: 3000
+    retry: { maxAttempts: 2, backoffMs: 250 }
+
+  - id: line-pressure-ok
+    name: Wait for pneumatic pressure
+    await:
+      condition: "sensors['line.pressure'] >= 1.0 && sensors['line.pressure'] <= 2.2"
+      timeoutMs: 20000
+
+  - id: machine
+    name: Mill part
+    equipmentType: CNC
+    durationMs: 3000
+    timeoutMs: 9000
+    retry: { maxAttempts: 4, backoffMs: 500, multiplier: 2.0, maxBackoffMs: 4000 }
+    set: { machined: true }
+
+  - id: deburr
+    name: Deburr edges
+    equipmentType: CNC
+    durationMs: 1500
+    timeoutMs: 5000
+    when: "vars['finish'] == 'fine'"
+
+  - id: unload
+    name: Unload part
+    equipmentType: ROBOT_ARM
+    durationMs: 700
+    timeoutMs: 3000
+    retry: { maxAttempts: 2, backoffMs: 250 }
