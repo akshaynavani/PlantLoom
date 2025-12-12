@@ -2,6 +2,7 @@ package com.plantloom.engine;
 
 import java.util.Map;
 import java.util.UUID;
+import java.util.function.Consumer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +16,7 @@ import com.plantloom.definition.WorkflowDefinitionRegistry;
 import com.plantloom.domain.InstanceStatus;
 import com.plantloom.domain.StageDefinition;
 import com.plantloom.domain.StageExecution;
+import com.plantloom.domain.StageStatus;
 import com.plantloom.domain.WorkflowDefinition;
 import com.plantloom.domain.WorkflowInstance;
 import com.plantloom.event.EventBus;
@@ -147,8 +149,8 @@ public class WorkflowOrchestrator {
                 StageExecution execution = instance.execution(stage.id());
                 if (!execution.getStatus().isTerminal()) {
                     execution.finish(status == InstanceStatus.TIMED_OUT
-                            ? com.plantloom.domain.StageStatus.TIMED_OUT
-                            : com.plantloom.domain.StageStatus.CANCELLED, reason);
+                            ? StageStatus.TIMED_OUT
+                            : StageStatus.CANCELLED, reason);
                 }
             });
             scheduler.forget(instance.getId());
@@ -171,7 +173,7 @@ public class WorkflowOrchestrator {
         });
     }
 
-    private void withInstance(WorkflowEvent event, java.util.function.Consumer<WorkflowInstance> action) {
+    private void withInstance(WorkflowEvent event, Consumer<WorkflowInstance> action) {
         repository.find(event.instanceId()).ifPresent(instance -> {
             MDC.put("instanceId", instance.getId());
             if (event.stageId() != null) {
