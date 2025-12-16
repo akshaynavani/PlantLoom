@@ -1,0 +1,6 @@
+# Activate with SPRING_PROFILES_ACTIVE=json for machine-readable (ECS) logs.
+# MDC keys instanceId / stageId are emitted as top-level fields for correlation.
+logging:
+  structured:
+    format:
+      console: ecs

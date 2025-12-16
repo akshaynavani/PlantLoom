@@ -67,3 +67,13 @@ management:
   endpoint:
     health:
       show-details: always
+      status:
+        order: DOWN, OUT_OF_SERVICE, DEGRADED, UNKNOWN, UP
+        http-mapping:
+          DEGRADED: 200
+
+logging:
+  pattern:
+    console: "%d{HH:mm:ss.SSS} %5p [%15.15t] %-40.40logger{39} [instance=%X{instanceId:-} stage=%X{stageId:-}] %m%n"
+  level:
+    com.plantloom: INFO
