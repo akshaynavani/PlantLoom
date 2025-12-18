@@ -1,0 +1,9 @@
+# Burst-load demo: SPRING_PROFILES_ACTIVE=load
+plantloom:
+  simulation:
+    time-scale: 0.5
+    load:
+      enabled: true
+      instances-per-workflow: 40
+      workflows: bottling-line,cnc-machining,paint-shop
+      stagger-ms: 10
