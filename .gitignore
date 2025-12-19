@@ -1,0 +1,35 @@
+# Build output
+target/
+build/
+out/
+*.class
+*.jar
+*.war
+!.mvn/wrapper/maven-wrapper.jar
+
+# Logs and runtime files
+*.log
+logs/
+hs_err_pid*
+replay_pid*
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# IDEs
+.idea/
+*.iml
+*.iws
+.vscode/
+.classpath
+.project
+.settings/
+.factorypath
+.sts4-cache/
+nbproject/
+
+# OS
+.DS_Store
+Thumbs.db
