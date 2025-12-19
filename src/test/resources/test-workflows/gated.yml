@@ -1,0 +1,11 @@
+id: gated
+name: Sensor gated flow
+stages:
+  - id: gate
+    await:
+      condition: "sensors['test.gate'] > 10"
+      timeoutMs: 5000
+  - id: work
+    equipmentType: MIXER
+    durationMs: 20
+    timeoutMs: 2000

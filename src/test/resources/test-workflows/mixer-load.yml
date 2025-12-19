@@ -1,0 +1,7 @@
+id: mixer-load
+name: Single mixer stage
+stages:
+  - id: mix
+    equipmentType: MIXER
+    durationMs: 40
+    timeoutMs: 5000

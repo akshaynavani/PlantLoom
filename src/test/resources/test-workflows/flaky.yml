@@ -1,0 +1,8 @@
+id: flaky
+name: Retrying stage
+stages:
+  - id: flaky
+    equipmentType: OVEN
+    durationMs: 20
+    timeoutMs: 200
+    retry: { maxAttempts: 3, backoffMs: 10, multiplier: 2.0 }

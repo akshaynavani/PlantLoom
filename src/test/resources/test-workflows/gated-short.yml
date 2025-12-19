@@ -1,0 +1,7 @@
+id: gated-short
+name: Gate that times out
+stages:
+  - id: gate
+    await:
+      condition: "sensors['test.never'] > 1000"
+      timeoutMs: 200

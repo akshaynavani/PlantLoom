@@ -1,0 +1,23 @@
+plantloom:
+  definitions-location: classpath:test-workflows/*.yml
+  engine:
+    worker-threads: 4
+    max-concurrent-instances: 500
+    equipment-acquire-timeout-ms: 10000
+    watchdog-interval-ms: 50
+  equipment:
+    units:
+      MIXER: 2
+      OVEN: 1
+  simulation:
+    failure-rate: 0
+    hang-rate: 0
+    duration-jitter: 0
+    time-scale: 1.0
+    seed: 42
+    sensor-feed:
+      enabled: false
+
+logging:
+  level:
+    com.plantloom: WARN

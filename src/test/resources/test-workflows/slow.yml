@@ -1,0 +1,7 @@
+id: slow
+name: Long running stage for cancellation
+stages:
+  - id: long
+    equipmentType: OVEN
+    durationMs: 5000
+    timeoutMs: 10000

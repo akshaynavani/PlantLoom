@@ -1,0 +1,19 @@
+id: quick
+name: Quick three-stage flow
+variables:
+  heat: false
+stages:
+  - id: mix
+    equipmentType: MIXER
+    durationMs: 30
+    timeoutMs: 2000
+    set: { mixed: true }
+  - id: record
+    name: Logic-only stage
+    set: { recorded: true }
+  - id: heat
+    equipmentType: OVEN
+    durationMs: 30
+    timeoutMs: 2000
+    when: "vars['heat'] == true"
+    set: { heated: true }
